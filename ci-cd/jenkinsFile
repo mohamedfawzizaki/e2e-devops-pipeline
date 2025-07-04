@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+
+    environment {
+        // Change these for your project
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REPO = 'mohamedfawzi/main-svc'
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        KUBE_CONFIG = credentials('kubeconfig')  // Jenkins Credential with kubeconfig file
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/yourusername/your-nodejs-app.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withDockerRegistry([credentialsId: 'dockerhub-creds', url: "https://${DOCKER_REGISTRY}"]) {
+                    sh "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh """
+                        kubectl set image deployment/your-deployment your-container=${DOCKER_REPO}:${IMAGE_TAG} -n your-namespace
+                        kubectl rollout status deployment/your-deployment -n your-namespace
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

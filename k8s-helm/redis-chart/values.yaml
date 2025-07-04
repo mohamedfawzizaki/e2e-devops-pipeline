@@ -1,0 +1,98 @@
+redis:
+  # -------------------------------------------------------------
+  # 🔐 Authentication
+  # -------------------------------------------------------------
+  auth:
+    enabled: true
+    existingSecret: redis-secret  # <-- create this beforehand
+
+  # Alternatively (not recommended for prod):
+  # password: "StrongRedisPassword123!"
+
+  # -------------------------------------------------------------
+  # ⚙️ Architecture
+  # -------------------------------------------------------------
+  architecture: standalone  # or replication
+
+  # -------------------------------------------------------------
+  # 💾 Persistence
+  # -------------------------------------------------------------
+  master:
+    persistence:
+      enabled: true
+      storageClass: ""  # "" uses default, or set "fast-ssd"
+      size: 8Gi
+
+  # -------------------------------------------------------------
+  # 📈 Resource Limits
+  # -------------------------------------------------------------
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+
+  # -------------------------------------------------------------
+  # 🚦 Probes
+  # -------------------------------------------------------------
+    livenessProbe:
+      enabled: true
+    readinessProbe:
+      enabled: true
+
+  # -------------------------------------------------------------
+  # 🔐 Security Context
+  # -------------------------------------------------------------
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+  # -------------------------------------------------------------
+  # 📊 Metrics
+  # -------------------------------------------------------------
+  # metrics:
+  #   enabled: true
+  #   serviceMonitor:
+  #     enabled: true
+  #   resources:
+  #     requests:
+  #       memory: 64Mi
+  #       cpu: 50m
+  #     limits:
+  #       memory: 128Mi
+  #       cpu: 100m
+
+  # -------------------------------------------------------------
+  # 🌐 Networking
+  # -------------------------------------------------------------
+  networkPolicy:
+    enabled: true
+    allowExternal: false
+
+  service:
+    type: ClusterIP
+    port: 6379
+
+  # -------------------------------------------------------------
+  # 📦 Image & Upgrade
+  # -------------------------------------------------------------
+  image:
+    tag: "7.2.5-debian-12-r0"  # Use a specific version
+
+  updateStrategy:
+    type: RollingUpdate
+
+  # -------------------------------------------------------------
+  # 🧰 Init/Sidecars (Optional)
+  # -------------------------------------------------------------
+  # extraDeploy:
+  #   - |-
+  #     apiVersion: v1
+  #     kind: ConfigMap
+  #     ...

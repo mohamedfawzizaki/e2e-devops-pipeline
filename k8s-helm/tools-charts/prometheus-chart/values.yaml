@@ -1,0 +1,5 @@
+prometheus: 
+  extraScrapeConfigs: |
+    - job_name: 'direct-extra'
+      static_configs:
+        - targets: ['direct-service:9090']

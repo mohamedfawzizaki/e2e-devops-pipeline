@@ -1,0 +1,100 @@
+.app-container {
+  width: 95%; /* Full width with small margins */
+  max-width: none; /* Remove max-width constraint */
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+button {
+  padding: 12px 24px; /* Larger buttons */
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px; /* Larger font */
+  transition: background-color 0.3s;
+  min-width: 150px; /* Wider buttons */
+}
+
+.results-container {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.result-card {
+  background-color: #f9f9f9;
+  border-left: 5px solid #4CAF50; /* Thicker border */
+  padding: 25px; /* More padding */
+  margin-bottom: 20px;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.result-card h3 {
+  margin-top: 0;
+  color: #333;
+  text-transform: capitalize;
+  font-size: 22px; /* Larger heading */
+}
+
+pre {
+  background-color: #f0f0f0;
+  padding: 20px; /* More padding */
+  border-radius: 6px;
+  overflow-x: auto;
+  width: 100%;
+  font-size: 16px; /* Larger code */
+  line-height: 1.5;
+  white-space: pre-wrap; /* Better text wrapping */
+  word-wrap: break-word;
+}
+
+/* Rest of your existing styles... */
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+button.loading {
+  position: relative;
+}
+
+button.loading::after {
+  content: "";
+  position: absolute;
+  right: 15px; /* Adjusted position */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px; /* Larger spinner */
+  height: 18px;
+  border: 3px solid #f3f3f3; /* Thicker border */
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}

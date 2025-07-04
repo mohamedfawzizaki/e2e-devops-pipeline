@@ -1,0 +1,35 @@
+# values.yaml
+
+ingress:
+  enabled: true
+
+  # Optional: specify the ingress class used by your ingress controller
+  className: "nginx"
+
+  # Optional: annotations applied to the ingress metadata
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+  # Optional TLS block for enabling HTTPS
+  tls:
+    - hosts:
+        - ecommerce.local
+      secretName: ecommerce-tls
+
+  # Define all hosts and paths this ingress should route
+  hosts:
+  
+    - host: ecommerce.local
+      paths:
+        - path: /
+          pathType: Prefix
+        - path: /api
+          pathType: Prefix
+
+# Required for the template's backend service reference
+service:
+  port: 80
+
+
+# helm install nginx-ingress-controller bitnami/nginx-ingress-controller --namespace ingress-nginx --create-namespace
