@@ -12,25 +12,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/yourusername/your-nodejs-app.git'
+                git branch: 'main', url: 'https://github.com/mohamedfawzizaki/e2e-devops-pipeline'
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
 
-        stage('Test') {
-            steps {
-                sh 'npm test'
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ."
+                sh "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ./src/services/main-svc"
             }
         }
 
@@ -46,8 +36,8 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh """
-                        kubectl set image deployment/your-deployment your-container=${DOCKER_REPO}:${IMAGE_TAG} -n your-namespace
-                        kubectl rollout status deployment/your-deployment -n your-namespace
+                        kubectl set image deployment/main-svc-dep main_svc_container=${DOCKER_REPO}:${IMAGE_TAG} -n default
+                        kubectl rollout status deployment/main-svc-dep -n default
                     """
                 }
             }
