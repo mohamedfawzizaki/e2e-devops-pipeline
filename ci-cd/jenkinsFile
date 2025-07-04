@@ -2,8 +2,10 @@ pipeline {
     agent { label 'kaniko' }
 
     environment {
-        IMAGE = "docker.io/mohamedfawzi/main-svc:1"
+        // IMAGE = "docker.io/mohamedfawzi/main-svc:1"
+        IMAGE = "docker.io/mohamedfawzi/my-image:1"
         KUBE_CONFIG = credentials('kubeconfig') // This assumes you added your kubeconfig as a Jenkins secret
+        DOCKERHUB_CRED = credentials('dockerhub-cred') // This assumes you added your dockerhub credentials as a Jenkins secret
     }
 
     stages {
@@ -16,24 +18,30 @@ pipeline {
         stage('Build Docker Image with Kaniko') {
             steps {
                 container('kaniko') {
+                    // sh '''
+                    // /kaniko/executor \
+                    //   --context `pwd`/src/services/main-svc \
+                    //   --dockerfile `pwd`/src/services/main-svc/Dockerfile \
+                    //   --destination $IMAGE
+                    // '''
                     sh '''
                     /kaniko/executor \
-                      --context `pwd`/src/services/main-svc \
-                      --dockerfile `pwd`/src/services/main-svc/Dockerfile \
+                      --context `pwd`/ \
+                      --dockerfile `pwd`/Dockerfile \
                       --destination $IMAGE
                     '''
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                withKubeConfig([credentialsId: 'kubeconfig']) {
-                    sh '''
-                    kubectl set image deployment main-svc main-svc=$IMAGE -n default
-                    '''
-                }
-            }
-        }
+        // stage('Deploy to Kubernetes') {
+        //     steps {
+        //         withKubeConfig([credentialsId: 'kubeconfig']) {
+        //             sh '''
+        //             kubectl set image deployment main-svc main-svc=$IMAGE -n default
+        //             '''
+        //         }
+        //     }
+        // }
     }
 }

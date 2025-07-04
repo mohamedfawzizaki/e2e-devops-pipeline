@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-k8s-credentials-reader
+  namespace: devops-tools
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-k8s-credentials-reader-binding
+  namespace: devops-tools
+subjects:
+- kind: ServiceAccount
+  name: jenkins
+  namespace: devops-tools
+roleRef:
+  kind: Role
+  name: jenkins-k8s-credentials-reader
+  apiGroup: rbac.authorization.k8s.io

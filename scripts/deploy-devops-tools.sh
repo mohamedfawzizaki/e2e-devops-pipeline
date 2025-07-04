@@ -3,7 +3,13 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 helm dependency build 
 
-helm install jenkins-release .\jenkins-chart\ -n devops-tools --create-namespace
+minikube ssh
+sudo chown -R 1000:1000 /data/jenkins-volume
+exit
+
+kubectl create namespace devops-tools
+
+helm install jenkins-release .\jenkins-chart\ -n devops-tools
 helm install prometheus-stack-release .\prometheus-chart\ -n devops-tools
 helm install grafana-release .\grafana-chart\ -n devops-tools
 

@@ -1,0 +1,16 @@
+{
+  "auths": {
+    "https://index.docker.io/v1/": {
+      "auth": "bW9oYW1lZGZhd3ppOm1vI2VzLmNvbTEyMw=="   
+    },
+    "ghcr.io": {
+      "auth": "Z2hpZHVzZXI6Z2hpZHBhc3M="   
+    },
+    "123456789012.dkr.ecr.us-west-1.amazonaws.com": {
+      "auth": "QUVJQVNKU0RGMlFERlU6QUJDMURFNkVY"   
+    },
+    "registry.gitlab.com": {
+      "auth": "Z2l0bGFiX3VzZXI6Z2l0bGFiX3Rva2Vu"   
+    }
+  }
+}
