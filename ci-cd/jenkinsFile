@@ -1,52 +1,39 @@
 pipeline {
-    agent any
+    agent { label 'kaniko' }
 
     environment {
-        // Change these for your project
-        DOCKER_REGISTRY = 'docker.io'
-        DOCKER_REPO = 'mohamedfawzi/main-svc'
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
-        KUBE_CONFIG = credentials('kubeconfig')  // Jenkins Credential with kubeconfig file
+        IMAGE = "docker.io/mohamedfawzi/main-svc:1"
+        KUBE_CONFIG = credentials('kubeconfig') // This assumes you added your kubeconfig as a Jenkins secret
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/mohamedfawzizaki/e2e-devops-pipeline'
+                git 'https://github.com/mohamedfawzizaki/e2e-devops-pipeline'
             }
         }
 
-
-
-        stage('Build Docker Image') {
+        stage('Build Docker Image with Kaniko') {
             steps {
-                sh "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ./src/services/main-svc"
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                withDockerRegistry([credentialsId: 'dockerhub-creds', url: "https://${DOCKER_REGISTRY}"]) {
-                    sh "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
+                container('kaniko') {
+                    sh '''
+                    /kaniko/executor \
+                      --context `pwd`/src/services/main-svc \
+                      --dockerfile `pwd`/src/services/main-svc/Dockerfile \
+                      --destination $IMAGE
+                    '''
                 }
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh """
-                        kubectl set image deployment/main-svc-dep main_svc_container=${DOCKER_REPO}:${IMAGE_TAG} -n default
-                        kubectl rollout status deployment/main-svc-dep -n default
-                    """
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh '''
+                    kubectl set image deployment main-svc main-svc=$IMAGE -n default
+                    '''
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
         }
     }
 }
