@@ -4,6 +4,7 @@ helm repo update
 helm search repo jenkins
 helm dependency build .\jenkins-chart\  
 minikube ssh
+sudo mkdir /data/jenkins-volume
 sudo chown -R 1000:1000 /data/jenkins-volume
 exit
 helm install jenkins-release .\jenkins-chart\ -n devops-tools --create-namespace
