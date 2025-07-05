@@ -13,3 +13,4 @@ windows:
 kubectl get pods --namespace devops-tools -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana-release" -o jsonpath="{.items[0].metadata.name}"
 
 kubectl --namespace devops-tools port-forward $POD_NAME 3000
+##
