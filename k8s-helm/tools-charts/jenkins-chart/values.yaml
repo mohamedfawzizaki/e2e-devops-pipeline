@@ -538,25 +538,25 @@ jenkins:
       #############################################################################################################################
       #############################################################################################################################
       #############################################################################################################################
-      # configScripts: 
-        # agents: |
-      jenkins:
-        clouds:
-          - kubernetes:
-              name: "kubernetes"
-              templates:
-                - name: "kaniko"
-                  label: "kaniko"
-                  containers:
-                    - name: "kaniko"
-                      image: "gcr.io/kaniko-project/executor:latest"
-                      command: ["cat"]
-                      ttyEnabled: true
-                      workingDir: "/workspace"
-                  volumes:
-                    - secretVolume:
-                        secretName: "dockerhub-credentials"
-                        mountPath: "/kaniko/.docker"
+      configScripts: {}
+      #   # agents: |
+      # jenkins:
+      #   clouds:
+      #     - kubernetes:
+      #         name: "kubernetes"
+      #         templates:
+      #           - name: "kaniko"
+      #             label: "kaniko"
+      #             containers:
+      #               - name: "kaniko"
+      #                 image: "gcr.io/kaniko-project/executor:latest"
+      #                 command: ["cat"]
+      #                 ttyEnabled: true
+      #                 workingDir: "/workspace"
+      #             volumes:
+      #               - secretVolume:
+      #                   secretName: "dockerhub-credentials"
+      #                   mountPath: "/kaniko/.docker"
       #############################################################################################################################
       #############################################################################################################################
       #############################################################################################################################

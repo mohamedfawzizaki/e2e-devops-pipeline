@@ -14,3 +14,12 @@ password =
 #
 minikube service jenkins-release -n devops-tools
 ngrok http <port>
+
+
+jenkins-release-jenkins-agent
+jnlp
+jenkins/inbound-agent:3309.v27b_9314fd1a_4-6
+/home/jenkins/agent
+${computer.jnlpmac} ${computer.name}
+JENKINS_URL
+http://jenkins-release.devops-tools.svc.cluster.local:8080/
