@@ -1,7 +1,7 @@
 grafana:  
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-  ###
+  ####
   persistence:
     type: pvc
     enabled: true
