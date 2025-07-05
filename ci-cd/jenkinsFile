@@ -1,47 +1,20 @@
 pipeline {
-    agent { label 'kaniko' }
-
-    environment {
-        // IMAGE = "docker.io/mohamedfawzi/main-svc:1"
-        IMAGE = "docker.io/mohamedfawzi/my-image:1"
-        KUBE_CONFIG = credentials('kubeconfig') // This assumes you added your kubeconfig as a Jenkins secret
-        DOCKERHUB_CRED = credentials('dockerhub-cred') // This assumes you added your dockerhub credentials as a Jenkins secret
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/mohamedfawzizaki/e2e-devops-pipeline'
-            }
+    agent {
+        kubernetes {
+            label 'kaniko'
+            defaultContainer 'kaniko'
         }
-
-        stage('Build Docker Image with Kaniko') {
+    }
+    stages {
+        stage('Build') {
             steps {
                 container('kaniko') {
-                    // sh '''
-                    // /kaniko/executor \
-                    //   --context `pwd`/src/services/main-svc \
-                    //   --dockerfile `pwd`/src/services/main-svc/Dockerfile \
-                    //   --destination $IMAGE
-                    // '''
                     sh '''
-                    /kaniko/executor \
-                      --context `pwd`/ \
-                      --dockerfile `pwd`/Dockerfile \
-                      --destination $IMAGE
+                        echo "Running build"
+                        /kaniko/executor --dockerfile=Dockerfile --context=. --destination=docker.io/mohamedfawzi/myapp:latest
                     '''
                 }
             }
         }
-
-        // stage('Deploy to Kubernetes') {
-        //     steps {
-        //         withKubeConfig([credentialsId: 'kubeconfig']) {
-        //             sh '''
-        //             kubectl set image deployment main-svc main-svc=$IMAGE -n default
-        //             '''
-        //         }
-        //     }
-        // }
     }
 }
