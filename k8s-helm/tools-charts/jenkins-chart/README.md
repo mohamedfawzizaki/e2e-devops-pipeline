@@ -11,6 +11,6 @@ helm install jenkins-release .\jenkins-chart\ -n devops-tools --create-namespace
 username = admin
 password = 
            kubectl exec --namespace devops-tools -it svc/jenkins-release -c jenkins -- /bin/cat /run/secrets/additional/chart-admin-password
-
+#
 minikube service jenkins-release -n devops-tools
 ngrok http <port>
