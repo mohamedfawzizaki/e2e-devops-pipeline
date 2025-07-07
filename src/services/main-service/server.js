@@ -26,7 +26,7 @@ app.get('/api/test-react-nginx', (req, res) => {
 });
 
 app.get('/api/test-proxy', (req, res) => {
-  res.json({ message: 'Proxy reached this backend !', host: os.hostname() });
+  res.json({ message: 'Proxy reached this backend!', host: os.hostname() });
 });
 
 app.get('/api/test-express', (req, res) => {
