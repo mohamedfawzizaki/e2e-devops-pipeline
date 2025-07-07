@@ -2,14 +2,13 @@ name: Build & Push Microservices
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
     paths:
       - 'src/services/**'
-    paths-ignore:
-      - '**/*.md'
-      - '.github/workflows/**'
-      - 'k8s-helm/**'
-      
+      - '!**/*.md'
+      - '!.github/workflows/**'
+      - '!k8s-helm/**'
 
 jobs:
   build-and-push: # ci workflow to build and push Docker images for each microservice
