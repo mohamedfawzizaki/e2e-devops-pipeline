@@ -30,7 +30,7 @@ app.get('/api/test-proxy', (req, res) => {
 });
 
 app.get('/api/test-express', (req, res) => {
-  res.json({ message: 'Express server is running !', host: os.hostname() });
+  res.json({ message: 'Express server is running!', host: os.hostname() });
 });
 
 app.get('/api/test-mysql', async (req, res) => {
