@@ -43,9 +43,9 @@ jobs:
           tags: |
             mohamedfawzi/${{ matrix.service }}:latest
 
-      # - name: Trigger Deploy Workflow
-      #   uses: peter-evans/repository-dispatch@v3
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     event-type: deploy-microservice
-      #     client-payload: '{"service": "${{ matrix.service }}", "tag": "${{ env.TAG }}"}'
+      - name: Trigger Deploy Workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: deploy-microservice
+          client-payload: '{"service": "${{ matrix.service }}", "tag:latest"}'

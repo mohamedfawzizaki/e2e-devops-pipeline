@@ -1,0 +1,40 @@
+name: Deploy Microservice to Minikube (via ngrok)
+
+on:
+  repository_dispatch:
+    types: [deploy-microservice]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig (ngrok public API)
+        run: |
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > kubeconfig
+          export KUBECONFIG=$PWD/kubeconfig
+          kubectl get nodes
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Deploy Service with Helm
+        run: |
+          SERVICE=${{ github.event.client_payload.service }}
+          TAG=${{ github.event.client_payload.tag }}
+
+          echo "Deploying service: $SERVICE with image tag: $TAG"
+
+          helm upgrade ${SERVICE} ./k8s-helm/services-charts/${SERVICE} \
+            --install \
+            --namespace my-apps \
+            --create-namespace \
+            --set image.repository=docker.io/mohamedfawzi/${SERVICE} \
+            --set image.tag=${TAG} \
+            --atomic
