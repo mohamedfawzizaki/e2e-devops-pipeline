@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/test-react-nginx', (req, res) => {
-  res.json({ message: 'React-Nginx is working !', host: os.hostname() });
+  res.json({ message: 'React-Nginx is working!', host: os.hostname() });
 });
 
 app.get('/api/test-proxy', (req, res) => {

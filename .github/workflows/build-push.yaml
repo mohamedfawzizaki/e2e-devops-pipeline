@@ -48,4 +48,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: deploy-microservice
-          client-payload: '{"service": "${{ matrix.service }}", "tag:latest"}'
+          client-payload: '{"service": "${{ matrix.service }}", "tag": "latest"}'
+
